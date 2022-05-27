@@ -1,0 +1,22 @@
+{
+  "name": "studbud",
+  "version": "1.0.0",
+  "description": "Web application for studying",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/attila0416/StudBud.git"
+  },
+  "author": "Attila Fazekas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/attila0416/StudBud/issues"
+  },
+  "homepage": "https://github.com/attila0416/StudBud#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
