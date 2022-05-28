@@ -1,0 +1,100 @@
+*, *:before, *:after {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 12pt;
+}
+
+header {
+    height: 80px;
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+h1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px 20px 20px;
+    font-size: 36pt;
+    font-weight: 300;
+}
+
+.main_text {
+    color: black;
+}
+
+.main_background {
+    background-color: #F0F1F3;
+}
+
+#bold_title {
+    font-size: 36pt;
+    font-weight: 700;
+}
+
+
+/* THEME SWITCH */
+.theme_container {
+    position: relative;
+}
+
+#theme {
+    opacity: 0;
+}
+
+.switch {
+    position: absolute;
+    display: inline-block;
+    bottom: 55px;
+    left: 80vw;
+    width: 55px;
+    height: 29px;
+    cursor: pointer;
+    background-color: white;
+    outline: 2px solid black;
+    border-radius: 40px;
+    transition: 0s;
+}
+
+.switch:after {
+    position: absolute;
+    left: 3px;
+    bottom: 3px;
+    height: 23px;
+    width: 23px;
+    content: "🔆";
+    display: flex;
+    justify-content: center;
+    color: orange;
+    border-radius: 50%;
+    transition: .3s;
+}
+
+
+/* DARK MODE */
+.dark_mode .main_text {
+    color: white;
+}
+
+.dark_mode .main_background {
+    background-color: #131313;
+}
+
+.dark_mode .switch {
+    background-color: #131313;
+    outline: 2px solid white;
+}
+
+.dark_mode .switch:after {
+    transform: translateX(26px);
+    content: "☾";
+}
+
+/*#212121*/
