@@ -34,48 +34,250 @@ h1 {
     background-color: #F0F1F3;
 }
 
+.white_background {
+    background-color: white;
+}
+
 #bold_title {
     font-size: 36pt;
     font-weight: 700;
 }
 
 
+
 /* THEME SWITCH */
-.theme_container {
-    position: relative;
-}
-
-#theme {
-    opacity: 0;
-}
-
-.switch {
+#theme_switch_box {
     position: absolute;
     display: inline-block;
-    bottom: 55px;
+    top: 27px;
     left: 80vw;
     width: 55px;
     height: 29px;
     cursor: pointer;
-    background-color: white;
     outline: 2px solid black;
     border-radius: 40px;
-    transition: 0s;
+    background-color: #f0f1f3;
 }
 
-.switch:after {
-    position: absolute;
-    left: 3px;
-    bottom: 3px;
-    height: 23px;
-    width: 23px;
-    content: "🔆";
+#theme_switch_box:hover {
+    background-color: white;
+}
+
+.dark_mode #theme_switch_box {
+    outline: 2px solid white;
+    background-color: #131313;
+}
+
+.dark_mode #theme_switch_box:hover {
+    background-color: #212121;
+}
+
+#switch_button_icon {
+    position: relative;
+    top: 3px;
+    left: 2px;
+    height: 5px;
+    transition: color 0s, left 0.3s;
+}
+
+.dark_mode #switch_button_icon {
+    left: 28px;
+}
+
+/* iPhone 12 Pro screen size*/
+@media only screen and (min-width: 390px) {
+    #theme_switch_box {
+        left: 80vw;
+    }
+}
+
+/* computer screen size */
+@media only screen and (min-width: 1600px) {
+    #theme_switch_box {
+        left: calc(50vw + 610px);
+    }
+}
+
+
+
+/* MAIN SECTION */
+main {
     display: flex;
     justify-content: center;
-    color: orange;
-    border-radius: 50%;
-    transition: .3s;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 30px;
 }
+
+h2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    font-size: 24pt;
+    font-weight: 500;
+}
+
+
+/* Kanban Board */
+.feature_section {
+    border-radius: 15px;
+    margin-bottom: 30px;
+}
+
+#kanban_board {
+    display: flex;
+}
+
+.kanban_column {
+    background-color: #f0f1f3;
+    border-radius: 12px;
+    margin: 0 45px 30px 45px;
+}
+
+
+
+/* ADD COLUMN BUTTON + its DARK MODE */
+#add_kanban_column {
+    border: none;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 360px;
+    height: 29px;
+    margin: 8px 45px 15px 45px;
+    border-radius: 40px;
+    background-color: white;
+    outline: 2px solid black;
+}
+
+#add_kanban_column:hover {
+    background-color: #f0f1f3;
+}
+
+#add_kanban_column:active {
+    outline: none;
+    background-color: #f0f1f3;
+}
+
+.dark_mode #add_kanban_column {
+    outline: 2px solid white;
+    background-color: #212121;
+}
+
+.dark_mode #add_kanban_column:hover {
+    background-color: #131313;
+}
+
+.dark_mode #add_kanban_column:active {
+    outline: none;
+    background-color: #131313;
+}
+
+
+
+/* CLOSE BUTTON + its DARK MODE */
+.close_button {
+    border: none;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 29px;
+    width: 29px;
+    border-radius: 50%;
+    background-color: #f0f1f3;
+    outline: 2px solid black;
+}
+
+.close_button:active {
+    outline: none;
+    background-color: white;
+}
+
+.close_button:hover {
+    background-color: white;
+}
+
+.dark_mode .close_button {
+    background-color: #131313;
+    outline: 2px solid white;
+}
+
+.dark_mode .close_button:active {
+    outline: none;
+    background-color: #272727;
+}
+
+.dark_mode .close_button:hover {
+    background-color: #272727;
+}
+
+.task {
+    height: 200px;
+    width: 300px;
+    /*background-color: white;*/
+}
+
+/* iPhone 12 Pro screen size*/
+@media only screen and (min-width: 390px) {
+    .feature_section {
+        width: min(85vw, 1350px);
+    }
+
+    #kanban_board {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .kanban_column {
+        width: 300px;
+    }
+
+    #add_kanban_column {
+        width: 300px;
+    }
+}
+
+/* computer screen size */
+@media only screen and (min-width: 1600px) {
+    .feature_section {
+        width: 1350px;
+    }
+
+    #kanban_board {
+        flex-direction: row;
+        justify-content: left;
+        align-items: normal;
+    }
+
+    .kanban_column {
+        width: 360px;
+    }
+
+    #add_kanban_column {
+        width: 360px;
+    }
+}
+
+
+
+.kanban_column_heading {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid white;
+    height: 50px;
+    padding: 10px 15px;
+}
+
+.dark_mode .kanban_column_heading {
+    border-bottom: 3px solid #212121;
+}
+
 
 
 /* DARK MODE */
@@ -87,14 +289,6 @@ h1 {
     background-color: #131313;
 }
 
-.dark_mode .switch {
-    background-color: #131313;
-    outline: 2px solid white;
+.dark_mode .white_background {
+    background-color: #212121;
 }
-
-.dark_mode .switch:after {
-    transform: translateX(26px);
-    content: "☾";
-}
-
-/*#212121*/

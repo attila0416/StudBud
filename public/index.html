@@ -10,19 +10,26 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
 
     <!-- Javascript -->
-    <script src="themeMode.js"></script>
     <script src="script.js"></script>
+    <script src="script.js"></script>
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet">
 </head>
 <body>
     <header class="main_background">
         <h1 class="main_text"><b id="bold_title">Stud</b>Bud</h1>
-        <label class="theme_container">
-            <input type="checkbox" id="theme">
-            <span class="switch"></span>
-        </label>
+        <div id="theme_switch_box" onselectstart="return false">
+            <span class="material-symbols-rounded main_text" id="switch_button_icon" onselectstart="return false">light_mode</span>
+        </div>
     </header>
 
-    <main class="main_background">
+    <main class="main_background main_text">
+        <div class="feature_section white_background">
+            <h2>Tasks</h2>
+            <div id="kanban_board">
+            </div>
+        </div>
     </main>
 
     <footer class="main_background main_text">
