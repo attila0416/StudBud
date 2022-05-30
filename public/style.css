@@ -1,3 +1,4 @@
+/* General settings */
 *, *:before, *:after {
     margin: 0px;
     padding: 0px;
@@ -43,6 +44,18 @@ h1 {
     font-weight: 700;
 }
 
+.dark_mode .main_text {
+    color: white;
+}
+
+.dark_mode .main_background {
+    background-color: #131313;
+}
+
+.dark_mode .white_background {
+    background-color: #212121;
+}
+
 
 
 /* THEME SWITCH */
@@ -59,8 +72,8 @@ h1 {
     background-color: #f0f1f3;
 }
 
-#theme_switch_box:hover {
-    background-color: white;
+#theme_switch_box:hover, #theme_switch_box:active {
+    outline: 2px solid #3f71e6;
 }
 
 .dark_mode #theme_switch_box {
@@ -68,8 +81,8 @@ h1 {
     background-color: #131313;
 }
 
-.dark_mode #theme_switch_box:hover {
-    background-color: #212121;
+.dark_mode #theme_switch_box:hover, .dark_mode #theme_switch_box:active {
+    outline: 2px solid #3f71e6;
 }
 
 #switch_button_icon {
@@ -87,7 +100,7 @@ h1 {
 /* iPhone 12 Pro screen size*/
 @media only screen and (min-width: 390px) {
     #theme_switch_box {
-        left: 80vw;
+        left: calc(50vw + 110px);
     }
 }
 
@@ -103,10 +116,12 @@ h1 {
 /* MAIN SECTION */
 main {
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     flex-direction: column;
     padding-top: 30px;
+    height: 100%;
+    min-height: calc(100vh - 120px);
 }
 
 h2 {
@@ -120,10 +135,17 @@ h2 {
 }
 
 
+
 /* Kanban Board */
-.feature_section {
+.tasks_section {
     border-radius: 15px;
     margin-bottom: 30px;
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 8px 24px;
+    background-color: white;
+}
+
+.dark_mode .tasks_section {
+    background-color: #212121;
 }
 
 #kanban_board {
@@ -134,6 +156,39 @@ h2 {
     background-color: #f0f1f3;
     border-radius: 12px;
     margin: 0 45px 30px 45px;
+}
+
+/* iPhone 12 Pro screen size*/
+@media only screen and (min-width: 390px) {
+    .tasks_section {
+        width: 350px;
+    }
+
+    #kanban_board {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .kanban_column {
+        width: 300px;
+    }
+}
+
+/* computer screen size */
+@media only screen and (min-width: 1600px) {
+    .tasks_section {
+        width: 1350px;
+    }
+
+    #kanban_board {
+        flex-direction: row;
+        justify-content: left;
+        align-items: normal;
+    }
+
+    .kanban_column {
+        width: 360px;
+    }
 }
 
 
@@ -147,19 +202,22 @@ h2 {
     align-items: center;
     width: 360px;
     height: 29px;
-    margin: 8px 45px 15px 45px;
-    border-radius: 40px;
+    font-weight: 500;
+    margin: 8px 45px 25px 45px;
+    border-radius: 7px;
     background-color: white;
     outline: 2px solid black;
 }
 
 #add_kanban_column:hover {
-    background-color: #f0f1f3;
+    outline: 2px solid #3f71e6;
+    transition: 0.2s;
 }
 
 #add_kanban_column:active {
-    outline: none;
-    background-color: #f0f1f3;
+    color: #3f71e6;
+    outline: 2px solid #3f71e6;
+    transition: 0.2s;
 }
 
 .dark_mode #add_kanban_column {
@@ -168,12 +226,29 @@ h2 {
 }
 
 .dark_mode #add_kanban_column:hover {
-    background-color: #131313;
+    background-color: #212121;
+    outline: 2px solid #3f71e6;
+    transition: 0.2s;
 }
 
 .dark_mode #add_kanban_column:active {
-    outline: none;
-    background-color: #131313;
+    color: #3f71e6;
+    outline: 2px solid #3f71e6;
+    transition: 0.2s;
+}
+
+/* iPhone 12 Pro screen size*/
+@media only screen and (min-width: 390px) {
+    #add_kanban_column {
+        width: 300px;
+    }
+}
+
+/* computer screen size */
+@media only screen and (min-width: 1600px) {
+    #add_kanban_column {
+        width: 360px;
+    }
 }
 
 
@@ -192,13 +267,15 @@ h2 {
     outline: 2px solid black;
 }
 
-.close_button:active {
-    outline: none;
-    background-color: white;
+.close_button:hover {
+    outline: 2px solid #3f71e6;
+    transition: 0.2s;
 }
 
-.close_button:hover {
-    background-color: white;
+.close_button:active {
+    color: #3f71e6;
+    outline: 2px solid #3f71e6;
+    transition: 0.2s;
 }
 
 .dark_mode .close_button {
@@ -206,60 +283,15 @@ h2 {
     outline: 2px solid white;
 }
 
-.dark_mode .close_button:active {
-    outline: none;
-    background-color: #272727;
-}
-
 .dark_mode .close_button:hover {
-    background-color: #272727;
+    outline: 2px solid #3f71e6;
+    transition: 0.2s;
 }
 
-.task {
-    height: 200px;
-    width: 300px;
-    /*background-color: white;*/
-}
-
-/* iPhone 12 Pro screen size*/
-@media only screen and (min-width: 390px) {
-    .feature_section {
-        width: min(85vw, 1350px);
-    }
-
-    #kanban_board {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .kanban_column {
-        width: 300px;
-    }
-
-    #add_kanban_column {
-        width: 300px;
-    }
-}
-
-/* computer screen size */
-@media only screen and (min-width: 1600px) {
-    .feature_section {
-        width: 1350px;
-    }
-
-    #kanban_board {
-        flex-direction: row;
-        justify-content: left;
-        align-items: normal;
-    }
-
-    .kanban_column {
-        width: 360px;
-    }
-
-    #add_kanban_column {
-        width: 360px;
-    }
+.dark_mode .close_button:active {
+    color: #3f71e6;
+    outline: 2px solid #3f71e6;
+    transition: 0.2s;
 }
 
 
@@ -269,26 +301,154 @@ h2 {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 3px solid white;
+    border-bottom: 2px solid #e2e3e5;
     height: 50px;
     padding: 10px 15px;
 }
 
 .dark_mode .kanban_column_heading {
-    border-bottom: 3px solid #212121;
+    border-bottom: 2px solid #1a1a1a;
+}
+
+.task {
+    height: 200px;
+    width: 300px;
+    /*background-color: white;*/
 }
 
 
 
-/* DARK MODE */
-.dark_mode .main_text {
+/* Small section features */
+.features_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 1350px;
+}
+
+.smaller_feature {
+    border-radius: 15px;
+    margin-bottom: 30px;
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 8px 24px;
+    background-color: white;
+}
+
+.dark_mode .smaller_feature {
+    background-color: #212121;
+}
+
+/* iPhone 12 Pro screen size*/
+@media only screen and (min-width: 390px) {
+    .features_container {
+        width: 350px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .smaller_feature {
+        width: 350px;
+    }
+}
+
+/* computer screen size */
+@media only screen and (min-width: 1600px) {
+    .features_container {
+        width: 1350px;
+        flex-direction: row;
+        align-items: normal;
+    }
+
+    .smaller_feature {
+        width: 650px;
+    }
+}
+
+
+.time {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stopwatch_time_number {
+    color: black;
+    text-align: center;
+    font-size: 70px;
+    font-weight: 500;
+}
+
+.colon {
+    width: 35px;
+}
+
+.dark_mode .stopwatch_time_number {
     color: white;
 }
 
-.dark_mode .main_background {
-    background-color: #131313;
+.buttons_container {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
 }
 
-.dark_mode .white_background {
+.buttons {
+    border: none;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 29px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    background-color: white;
+    border-radius: 7px;
+    color: black;
+    outline: 2px solid black;
+}
+
+#stopwatch_start:hover {
+    outline: 2px solid #30c862;
+    transition: 0.2s;
+}
+
+#stopwatch_start:active {
+    color: #30c862;
+    outline: 2px solid #30c862;
+    transition: 0.2s;
+}
+
+#stopwatch_stop:hover {
+    outline: 2px solid #fe5157;
+    transition: 0.2s;
+}
+
+#stopwatch_stop:active {
+    color: #fe5157;
+    outline: 2px solid #fe5157;
+    transition: 0.2s;
+}
+
+#stopwatch_reset:hover {
+    outline: 2px solid #fed449;
+    transition: 0.2s;
+}
+
+#stopwatch_reset:active {
+    color: #fed449;
+    outline: 2px solid #fed449;
+    transition: 0.2s;
+}
+
+.dark_mode .buttons {
+    color: white;
     background-color: #212121;
+    outline: 2px solid white;
 }

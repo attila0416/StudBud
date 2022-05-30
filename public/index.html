@@ -19,15 +19,45 @@
 <body>
     <header class="main_background">
         <h1 class="main_text"><b id="bold_title">Stud</b>Bud</h1>
-        <div id="theme_switch_box" onselectstart="return false">
-            <span class="material-symbols-rounded main_text" id="switch_button_icon" onselectstart="return false">light_mode</span>
+        <div id="theme_switch_box">
+            <span class="material-symbols-rounded main_text" id="switch_button_icon">light_mode</span>
         </div>
     </header>
 
     <main class="main_background main_text">
-        <div class="feature_section white_background">
+        <div class="tasks_section">
             <h2>Tasks</h2>
             <div id="kanban_board">
+            </div>
+        </div>
+        <div class="features_container">
+            <div class="smaller_feature">
+                <h2 class="main_text">Pomodoro</h2>
+            </div>
+            <div class="smaller_feature">
+                <h2 class="main_text">Stopwatch</h2>
+                <div class="stopwatch">
+                    <div class="time">
+                        <p id="stopwatch_hour" class="stopwatch_time_number">00</p>
+                        <p class="stopwatch_time_number colon">:</p>
+                        <p id="stopwatch_minute" class="stopwatch_time_number">00</p>
+                        <p class="stopwatch_time_number colon">:</p>
+                        <p id="stopwatch_second" class="stopwatch_time_number">00</p>
+                    </div>
+                    <div class="buttons_container">
+                        <button id="stopwatch_start" class="buttons">Start</button>
+                        <button id="stopwatch_stop" class="buttons">Stop</button>
+                        <button id="stopwatch_reset" class="buttons">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="features_container">
+            <div class="smaller_feature">
+                <h2 class="main_text">Dictionary</h2>
+            </div>
+            <div class="smaller_feature">
+                <h2 class="main_text">Music Player</h2>
             </div>
         </div>
     </main>

@@ -7,6 +7,7 @@ window.onload = function () {
     checkThemeOnLoad();
     let themeButton = document.getElementById("theme_switch_box");
     themeButton.addEventListener("click", changeTheme);
+    addStopwatchEventListeners();
 }
 
 
@@ -165,4 +166,78 @@ function addKanbanColumnAddButtonHTML() {
     return "<button type='button' id='add_kanban_column' class='main_text'>" +
         "<span class='material-symbols-rounded md-18'>add</span> Add column" +
         "</button>";
+}
+
+
+
+// Stopwatch functionality
+var stopwatchSecond = 0;
+var stopwatchMinute = 0;
+var stopwatchHour = 0;
+var startTimer = null;
+var currentActiveStopwatchButton = "Reset";
+
+function addStopwatchEventListeners() {
+    let startButton = document.getElementById("stopwatch_start");
+    let stopButton = document.getElementById("stopwatch_stop");
+    let resetButton = document.getElementById("stopwatch_reset");
+    startButton.addEventListener("click", startStopWatch);
+    stopButton.addEventListener("click", stopStopwatch);
+    resetButton.addEventListener("click", resetStopwatch);
+}
+
+function startStopWatch() {
+    if (currentActiveStopwatchButton !== "Start") {
+        currentActiveStopwatchButton = "Start";
+
+        startTimer = setInterval(() => {
+            stopwatchSecond++;
+            if(stopwatchSecond === 60){
+                stopwatchSecond = 0;
+                stopwatchMinute++;
+                if(stopwatchMinute === 60){
+                    stopwatchMinute = 0;
+                    stopwatchHour++;
+                }
+            }
+            let second = stopwatchSecond < 10 ? "0" + stopwatchSecond : stopwatchSecond;
+            let minute = stopwatchMinute < 10 ? "0" + stopwatchMinute : stopwatchMinute;
+            let hour = stopwatchHour < 10 ? "0" + stopwatchHour : stopwatchHour;
+
+            putValue(hour, minute, second);
+        },1000);
+        setPropertyOfClass("stopwatch_time_number", "color", "#30c862")
+    }
+}
+
+function stopStopwatch() {
+    if (currentActiveStopwatchButton === "Start") {
+        currentActiveStopwatchButton = "Stop";
+        clearInterval(startTimer);
+        setPropertyOfClass("stopwatch_time_number", "color", "#fe5157")
+    }
+}
+
+function resetStopwatch() {
+    currentActiveStopwatchButton = "Reset";
+    stopwatchSecond = 0;
+    stopwatchMinute = 0;
+    stopwatchHour = 0;
+    clearInterval(startTimer);
+    putValue("0" + 0, "0" + 0, "0" + 0);
+    setPropertyOfClass("stopwatch_time_number", "color", "");
+}
+
+function putValue(hour, minute, second) {
+    document.getElementById("stopwatch_hour").innerText = hour;
+    document.getElementById("stopwatch_minute").innerText = minute;
+    document.getElementById("stopwatch_second").innerText = second;
+}
+
+function setPropertyOfClass(className, property, value) {
+    let classItems = document.getElementsByClassName(className);
+    for (let i = 0; i < classItems.length; i++) {
+        let item = classItems[i];
+        item.style.setProperty(property, value)
+    }
 }
