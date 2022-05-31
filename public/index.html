@@ -30,10 +30,34 @@
             <div id="kanban_board">
             </div>
         </div>
+
+        <!-- TIMERS -->
         <div class="features_container">
-            <div class="smaller_feature">
+
+            <!-- Pomodoro timer section -->
+            <div class="smaller_feature" id="pomodoro_feature">
                 <h2 class="main_text">Pomodoro</h2>
+                <button type='button' class='main_text' id="settings_button">
+                    <span class='material-symbols-rounded'>settings</span>
+                </button>
+                <div id="pomodoro">
+                    <!-- Pomodoro time -->
+                    <div class="time">
+                        <p id="pomodoro_minute" class="pomodoro_time_number">25</p>
+                        <p class="pomodoro_time_number colon">:</p>
+                        <p id="pomodoro_second" class="pomodoro_time_number">00</p>
+                    </div>
+
+                    <!-- Buttons to control the Pomodoro timer -->
+                    <div class="buttons_container">
+                        <button id="pomodoro_start" class="buttons">Start</button>
+                        <button id="pomodoro_stop" class="buttons">Stop</button>
+                        <button id="pomodoro_reset" class="buttons">Reset</button>
+                    </div>
+                </div>
             </div>
+
+            <!-- Stopwatch timer section -->
             <div class="smaller_feature">
                 <h2 class="main_text">Stopwatch</h2>
                 <div class="stopwatch">
