@@ -7,6 +7,8 @@ window.onload = function () {
 
     addStopwatchEventListeners();
     addPomodoroEventListeners();
+
+    addDictionarySearchLEventListener();
 }
 
 
@@ -123,7 +125,7 @@ function addEventListenerForAddColumn() {
 }
 
 function addEventListenerForColumnClose() {
-    let closeButton = document.getElementsByClassName("close_button");
+    let closeButton = document.getElementsByClassName("close_column_button");
     for (let j = 0; j < closeButton.length; j++) {
         closeButton[j].addEventListener("click", closeColumn);
     }
@@ -163,7 +165,7 @@ function addKanbanColumnHTML(columnId) {
     return `<div class='kanban_column main_background' id=${columnId}>
                 <div class='kanban_column_heading'>
                     <h3 contenteditable='true'> ${columnId} Task List | </h3>
-                    <button type='button' class='close_button main_text'>
+                    <button type='button' class='close_column_button general_circle_button main_text'>
                         <span class='material-symbols-rounded md-18'>close</span>
                     </button>
                 </div>
@@ -414,27 +416,146 @@ function pomodoroSettingsHTML() {
                     <!-- Session length input field -->
                     <li>
                         <label for="session" class="pomodoro_label_title">Session (min):</label>
-                        <input id="session" class="pomodoro_details_input" name="session" type="number" maxlength="2" min="1" max="60"  value=${session} required>
+                        <input id="session" class="input_field pomodoro_input_field" name="session" type="number" maxlength="2" min="1" max="60"  value=${session} required>
                     </li>
 
                     <!-- Short break length input field -->
                     <li>
                         <label for="short_break" class="pomodoro_label_title">Short Break (min):</label>
-                        <input id="short_break" class="pomodoro_details_input" name="short_break" type="number" maxlength="2" min="1" max="60"  value=${shortBreak} required>
+                        <input id="short_break" class="input_field pomodoro_input_field" name="short_break" type="number" maxlength="2" min="1" max="60"  value=${shortBreak} required>
                     </li>
 
                     <!-- Cycles -->
                     <li>
                         <label for="cycles" class="pomodoro_label_title">Cycles:</label>
-                        <input id="cycles" class="pomodoro_details_input" name="cycles" type="number" maxlength="2" min="0" max="99" value=${cycles} required>
+                        <input id="cycles" class="input_field pomodoro_input_field" name="cycles" type="number" maxlength="2" min="0" max="99" value=${cycles} required>
                     </li>
 
                     <!-- Long break length input field -->
                     <li>
                         <label for="long_break" class="pomodoro_label_title">Long Break (min):</label>
-                        <input id="long_break" class="pomodoro_details_input" name="long_break" type="number" maxlength="2" min="1" max="60" value=${longBreak} required>
+                        <input id="long_break" class="input_field pomodoro_input_field" name="long_break" type="number" maxlength="2" min="1" max="60" value=${longBreak} required>
                     </li>
                 </ul>
-                <button type="submit" id="pomodoro_update_button">Update</button>
+                <button type="submit" id="pomodoro_update_button" class="buttons general_buttons">Update</button>
             </form>`;
+}
+
+function addDictionarySearchLEventListener() {
+    let dictionarySearchButton = document.getElementById("dictionary_search");
+    dictionarySearchButton.addEventListener("click", dictionaryApiRequest);
+}
+
+function dictionaryApiRequest() {
+    let wordRequested = document.getElementById("definition");
+    if (wordRequested.value !== "") {
+        let word = wordRequested.value;
+        let url = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
+
+        // setup request for data collection
+        let request = new XMLHttpRequest();
+
+        // open the connection to the API
+        request.open('GET', url);
+
+        // handle the data loading
+        request.onload = function () {
+
+            // check the outcome of the request
+            if (request.status >= 200 && request.status < 400) {
+                let meanings = JSON.parse(this.response)[0]["meanings"];
+                showDictionaryResults(meanings, word);
+
+            } else {
+                showUnsuccessfulDictionarySearch(word);
+            }
+        }
+        // send request
+        request.send();
+
+        // reset input field of the searched word
+        resetValueOfInputField(wordRequested);
+    }
+}
+
+var fingingsId = 0;
+
+function showDictionaryResults(meanings_json, word) {
+    let dictionary = document.getElementById("dictionary");
+    let dictionaryFindingsId = "dictionary_findings" + fingingsId;
+    dictionary.innerHTML += `<div id=${dictionaryFindingsId} class="dictionary_findings">
+                                <!-- Close the findings window -->
+                                <button type='button' class='main_text general_circle_button findings_close_button'>
+                                    <span class='material-symbols-rounded'>close</span>
+                                </button>
+                                <h3 class="searched_word">${word}</h3>
+                                <p class="definition_and_synonym">Definitions:</p>
+                             </div>`;
+    let dictionary_findings = document.getElementById(dictionaryFindingsId);
+    for (let i = 0; i < meanings_json["length"]; i++) {
+        dictionary_findings.innerHTML += `<p class="definition_type">${meanings_json[i]["partOfSpeech"]}</p>
+                                <p class="definition_sentence">${meanings_json[i]["definitions"][0]["definition"]}</p>`;
+    }
+
+    let allSynonyms = ``;
+    for (let i = 0; i < meanings_json["length"]; i++) {
+        if (meanings_json[i]["synonyms"]["length"] !== 0) {
+            for (let j = 0; j < meanings_json[i]["synonyms"]["length"]; j++) {
+                if (/^[A-Za-z0-9 ]*$/.test(meanings_json[i]["synonyms"][j]) === true) {
+                    if (allSynonyms === ``) {
+                        allSynonyms += `${meanings_json[i]["synonyms"][j]} `;
+                    } else {
+                        allSynonyms += `, ${meanings_json[i]["synonyms"][j]}`;
+                    }
+                }
+            }
+        }
+    }
+    if (allSynonyms !== ``) {
+        dictionary_findings.innerHTML += `<p class="definition_and_synonym">Synonyms:</p>
+                                          <p class="definition_sentence">${allSynonyms}</p>`;
+    } else {
+        dictionary_findings.innerHTML += `<p class="definition_and_synonym">Synonyms:</p>
+                                          <p class="error_sentence">No synonyms were found.</p>`;
+    }
+    addDictionarySearchLEventListener();
+    addDictionaryCloseButtonsEventListeners();
+    fingingsId += 1;
+}
+
+function showUnsuccessfulDictionarySearch(word) {
+    let dictionary = document.getElementById("dictionary");
+    dictionary.innerHTML += `<div id="dictionary_findings" class="dictionary_findings">
+                                <!-- Close the findings window -->
+                                <button type='button' class='main_text general_circle_button findings_close_button'>
+                                    <span class='material-symbols-rounded'>close</span>
+                                </button>
+                                <h3 class="searched_word">${word}</h3>
+                                <p class="error_sentence">No results were found for this word.</p>
+                             </div>`;
+    addDictionarySearchLEventListener();
+    addDictionaryCloseButtonsEventListeners();
+    fingingsId += 1;
+}
+
+function resetValueOfInputField(field) {
+    field.required = false;
+    field.value = "";
+    setTimeout(function () {
+        field.required = true;
+    }, 10);
+}
+
+function addDictionaryCloseButtonsEventListeners() {
+    let closeButtons = document.getElementsByClassName("findings_close_button");
+    for (let j = 0; j < closeButtons.length; j++) {
+        closeButtons[j].addEventListener("click", closeDefinitionFindings);
+    }
+}
+
+function closeDefinitionFindings() {
+    let definitionFindings = this.parentNode;
+    definitionFindings.remove();
+    addDictionarySearchLEventListener();
+    addDictionaryCloseButtonsEventListeners();
 }

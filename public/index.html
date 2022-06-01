@@ -1,93 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width">
-    <title>StudBud</title>
-    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <title>StudBud</title>
+        <link rel="icon" type="image/x-icon" href="images/favicon.ico">
 
-    <!-- CSS -->
-    <link href="style.css" rel="stylesheet" type="text/css" />
+        <!-- CSS -->
+        <link href="style.css" rel="stylesheet" type="text/css"/>
 
-    <!-- Javascript -->
-    <script src="script.js"></script>
-    <script src="script.js"></script>
+        <!-- Javascript -->
+        <script src="script.js"></script>
 
-    <!-- Font -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet">
-</head>
-<body>
-    <header class="main_background">
-        <h1 class="main_text"><b id="bold_title">Stud</b>Bud</h1>
-        <div id="theme_switch_box">
-            <span class="material-symbols-rounded main_text" id="switch_button_icon">light_mode</span>
-        </div>
-    </header>
+        <!-- Font -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet">
+    </head>
+    <body>
+        <!-- HEADER section -->
+        <header class="main_background">
+            <h1 class="main_text"><b id="bold_title">Stud</b>Bud</h1>
 
-    <main class="main_background main_text">
-        <div class="tasks_section">
-            <h2>Tasks</h2>
-            <div id="kanban_board">
+            <!-- Light/Dark Mode button -->
+            <div id="theme_switch_box">
+                <span class="material-symbols-rounded main_text" id="switch_button_icon">light_mode</span>
             </div>
-        </div>
+        </header>
 
-        <!-- TIMERS -->
-        <div class="features_container">
+        <!-- MAIN section -->
+        <main class="main_background main_text">
 
-            <!-- Pomodoro timer section -->
-            <div class="smaller_feature" id="pomodoro_feature">
-                <h2 class="main_text">Pomodoro</h2>
-                <button type='button' class='main_text' id="settings_button">
-                    <span class='material-symbols-rounded'>settings</span>
-                </button>
-                <div id="pomodoro">
-                    <!-- Pomodoro time -->
-                    <div class="time">
-                        <p id="pomodoro_minute" class="pomodoro_time_number">25</p>
-                        <p class="pomodoro_time_number colon">:</p>
-                        <p id="pomodoro_second" class="pomodoro_time_number">00</p>
+            <!-- Tasks and Kanban board section -->
+            <div class="tasks_section">
+                <h2>Tasks</h2>
+                <div id="kanban_board">
+                    <!-- Kanban columns are dynamically loaded here from localstorage using JS
+                    ,where the first column is the task list -->
+                </div>
+            </div>
+
+            <!-- Container for the Pomodoro and Stopwatch timers -->
+            <div class="features_container">
+
+                <!-- Pomodoro timer section -->
+                <div class="smaller_feature" id="pomodoro_feature">
+                    <h2 class="main_text">Pomodoro</h2>
+
+                    <!-- Pomodoro settings button to edit the time intervals -->
+                    <button type='button' class='main_text general_circle_button' id="settings_button">
+                        <span class='material-symbols-rounded'>settings</span>
+                    </button>
+
+                    <div id="pomodoro">
+                        <!-- Pomodoro time display -->
+                        <div class="time">
+                            <p id="pomodoro_minute" class="pomodoro_time_number">25</p>
+                            <p class="pomodoro_time_number colon">:</p>
+                            <p id="pomodoro_second" class="pomodoro_time_number">00</p>
+                        </div>
+
+                        <!-- Buttons to control the Pomodoro timer -->
+                        <div class="buttons_container">
+                            <button id="pomodoro_start" class="buttons">Start</button>
+                            <button id="pomodoro_stop" class="buttons">Stop</button>
+                            <button id="pomodoro_reset" class="buttons">Reset</button>
+                        </div>
                     </div>
 
-                    <!-- Buttons to control the Pomodoro timer -->
-                    <div class="buttons_container">
-                        <button id="pomodoro_start" class="buttons">Start</button>
-                        <button id="pomodoro_stop" class="buttons">Stop</button>
-                        <button id="pomodoro_reset" class="buttons">Reset</button>
+                    <!-- Pomodoro Settings are dynamically inserted here from JS when settings_button is clicked -->
+                </div>
+
+                <!-- Stopwatch timer section -->
+                <div class="smaller_feature">
+                    <h2 class="main_text">Stopwatch</h2>
+
+                    <div class="stopwatch">
+                        <!-- Stopwatch time display -->
+                        <div class="time">
+                            <p id="stopwatch_hour" class="stopwatch_time_number">00</p>
+                            <p class="stopwatch_time_number colon">:</p>
+                            <p id="stopwatch_minute" class="stopwatch_time_number">00</p>
+                            <p class="stopwatch_time_number colon">:</p>
+                            <p id="stopwatch_second" class="stopwatch_time_number">00</p>
+                        </div>
+
+                        <!-- Buttons to control the Stopwatch timer -->
+                        <div class="buttons_container">
+                            <button id="stopwatch_start" class="buttons">Start</button>
+                            <button id="stopwatch_stop" class="buttons">Stop</button>
+                            <button id="stopwatch_reset" class="buttons">Reset</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Stopwatch timer section -->
-            <div class="smaller_feature">
-                <h2 class="main_text">Stopwatch</h2>
-                <div class="stopwatch">
-                    <div class="time">
-                        <p id="stopwatch_hour" class="stopwatch_time_number">00</p>
-                        <p class="stopwatch_time_number colon">:</p>
-                        <p id="stopwatch_minute" class="stopwatch_time_number">00</p>
-                        <p class="stopwatch_time_number colon">:</p>
-                        <p id="stopwatch_second" class="stopwatch_time_number">00</p>
+            <!-- Container for the Dictionary and Music Player -->
+            <div class="features_container">
+
+                <!-- Dictionary -->
+                <div class="smaller_feature" id="dictionary">
+                    <h2 class="main_text">Dictionary</h2>
+
+                    <!-- API request form -->
+                    <div class="search_container">
+                        <form class="api_request_form" onsubmit="return false">
+                            <label for="definition">Definitions & Synonyms of:</label>
+                            <input class="input_field" id="definition" name="definition" type="text"
+                                   placeholder="Type a word here..." required>
+                            <button type="submit" class="buttons general_buttons" id="dictionary_search">Search</button>
+                        </form>
                     </div>
-                    <div class="buttons_container">
-                        <button id="stopwatch_start" class="buttons">Start</button>
-                        <button id="stopwatch_stop" class="buttons">Stop</button>
-                        <button id="stopwatch_reset" class="buttons">Reset</button>
-                    </div>
+
+                    <!-- The results for a word's definition and synonyms are dynamically inserted here using JS -->
+                </div>
+
+                <!-- Music Player -->
+                <div class="smaller_feature">
+                    <h2 class="main_text">Music Player</h2>
                 </div>
             </div>
-        </div>
-        <div class="features_container">
-            <div class="smaller_feature">
-                <h2 class="main_text">Dictionary</h2>
-            </div>
-            <div class="smaller_feature">
-                <h2 class="main_text">Music Player</h2>
-            </div>
-        </div>
-    </main>
+        </main>
 
-    <footer class="main_background main_text">
-        <p>Copyright © 2022 <b>Stud</b>Bud</p>
-    </footer>
-</body>
+        <!-- FOOTER section -->
+        <footer class="main_background main_text">
+            <p>Copyright © 2022 <b>Stud</b>Bud</p>
+        </footer>
+    </body>
 </html>
