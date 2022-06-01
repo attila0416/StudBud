@@ -11,6 +11,16 @@ header {
     height: 80px;
 }
 
+main {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 30px;
+    height: 100%;
+    min-height: calc(100vh - 120px);
+}
+
 footer {
     display: flex;
     justify-content: center;
@@ -27,6 +37,20 @@ h1 {
     font-weight: 300;
 }
 
+h2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    font-size: 24pt;
+    font-weight: 500;
+}
+
+h3 {
+    font-size: 14pt;
+}
+
 .main_text {
     color: black;
 }
@@ -39,7 +63,7 @@ h1 {
     background-color: white;
 }
 
-#bold_title {
+.bold_title {
     font-size: 36pt;
     font-weight: 700;
 }
@@ -55,6 +79,8 @@ h1 {
 .dark_mode .white_background {
     background-color: #212121;
 }
+
+
 
 /* General input field */
 .input_field {
@@ -79,6 +105,8 @@ h1 {
     outline: 1px solid white;
 }
 
+
+
 /* All buttons */
 .buttons {
     border: none;
@@ -96,30 +124,30 @@ h1 {
     outline: 2px solid black;
 }
 
-/* General button actions */
-.general_buttons:hover {
+/* General button actions + general circle buttons */
+.general_buttons:hover, .general_circle_button:hover {
     outline: 2px solid #3f71e6;
     transition: 0.2s;
 }
 
-.general_buttons:active {
+.general_buttons:active, .general_circle_button:active {
     color: #3f71e6;
     outline: 2px solid #3f71e6;
     transition: 0.2s;
 }
 
-.dark_mode .general_buttons {
+.dark_mode .general_buttons, .dark_mode .buttons  {
     color: white;
     background-color: #212121;
     outline: 2px solid white;
 }
 
-.dark_mode .general_buttons:hover {
+.dark_mode .general_buttons:hover, .dark_mode .general_circle_button:hover  {
     outline: 2px solid #3f71e6;
     transition: 0.2s;
 }
 
-.dark_mode .general_buttons:active {
+.dark_mode .general_buttons:active, .dark_mode .general_circle_button:active {
     color: #3f71e6;
     outline: 2px solid #3f71e6;
     transition: 0.2s;
@@ -139,32 +167,11 @@ h1 {
     outline: 2px solid black;
 }
 
-.general_circle_button:hover {
-    outline: 2px solid #3f71e6;
-    transition: 0.2s;
-}
-
-.general_circle_button:active {
-    color: #3f71e6;
-    outline: 2px solid #3f71e6;
-    transition: 0.2s;
-}
-
 .dark_mode .general_circle_button {
     background-color: #131313;
     outline: 2px solid white;
 }
 
-.dark_mode .general_circle_button:hover {
-    outline: 2px solid #3f71e6;
-    transition: 0.2s;
-}
-
-.dark_mode .general_circle_button:active {
-    color: #3f71e6;
-    outline: 2px solid #3f71e6;
-    transition: 0.2s;
-}
 
 
 /* THEME SWITCH */
@@ -221,27 +228,6 @@ h1 {
 }
 
 
-/* MAIN SECTION */
-main {
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    flex-direction: column;
-    padding-top: 30px;
-    height: 100%;
-    min-height: calc(100vh - 120px);
-}
-
-h2 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-bottom: 15px;
-    padding-top: 15px;
-    font-size: 24pt;
-    font-weight: 500;
-}
-
 
 /* Kanban Board */
 .tasks_section {
@@ -297,6 +283,7 @@ h2 {
         width: 360px;
     }
 }
+
 
 
 /* ADD COLUMN BUTTON + its DARK MODE */
@@ -357,7 +344,6 @@ h2 {
     }
 }
 
-
 .kanban_column_heading {
     display: flex;
     flex-direction: row;
@@ -377,6 +363,7 @@ h2 {
     width: 300px;
     /*background-color: white;*/
 }
+
 
 
 /* Small section features */
@@ -425,7 +412,6 @@ h2 {
     }
 }
 
-
 .time {
     display: flex;
     align-items: center;
@@ -457,60 +443,52 @@ h2 {
     flex-direction: row;
 }
 
-#stopwatch_start:hover {
+
+
+/* Timers' buttons colouring (for both pomodoro and stopwatch) */
+.time_start:hover {
     outline: 2px solid #30c862;
     transition: 0.2s;
 }
 
-#stopwatch_start:active {
+.time_start:active {
     color: #30c862;
     outline: 2px solid #30c862;
     transition: 0.2s;
 }
 
-#stopwatch_stop:hover {
+.time_stop:hover {
     outline: 2px solid #fe5157;
     transition: 0.2s;
 }
 
-#stopwatch_stop:active {
+.time_stop:active {
     color: #fe5157;
     outline: 2px solid #fe5157;
     transition: 0.2s;
 }
 
-#stopwatch_reset:hover {
+.time_reset:hover {
     outline: 2px solid #fed449;
     transition: 0.2s;
 }
 
-#stopwatch_reset:active {
+.time_reset:active {
     color: #fed449;
     outline: 2px solid #fed449;
     transition: 0.2s;
 }
 
-.dark_mode .buttons {
-    color: white;
-    background-color: #212121;
-    outline: 2px solid white;
-}
 
 
 /* POMODORO TIMER */
 .pomodoro_time_number {
-    color: black;
     text-align: center;
     font-size: 70px;
     font-weight: 500;
 }
 
-.dark_mode .pomodoro_time_number {
-    color: white;
-}
-
 .pomodoro_label_title {
-    /*display: block;*/
     font-weight: 500;
     padding-bottom: 5px;
     margin-top: 25px;
@@ -533,10 +511,6 @@ h2 {
 
 .dark_mode #pomodoro_update_button {
     background-color: #131313;
-}
-
-h3 {
-    font-size: 14pt;
 }
 
 #details_section {
@@ -572,6 +546,23 @@ h3 {
     background-color: #131313;
 }
 
+#pomodoro_settings_title {
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+
+/* Pomodoro Settings button */
+#settings_button {
+    background-color: white;
+    position: absolute;
+    top: 20px;
+    left: calc(50% + 108px);
+}
+
+.dark_mode #settings_button {
+    background-color: #212121;
+}
+
 /* iPhone 12 Pro screen size*/
 @media only screen and (min-width: 390px) {
     #details_section {
@@ -580,6 +571,10 @@ h3 {
 
     #pomodoro_settings_form {
         width: 300px;
+    }
+
+    #details_section li {
+        padding-bottom: 8px;
     }
 }
 
@@ -592,22 +587,7 @@ h3 {
     #pomodoro_settings_form {
         width: 555px;
     }
-}
 
-#pomodoro_settings_title {
-    padding-top: 10px;
-    padding-bottom: 5px;
-}
-
-/* iPhone 12 Pro screen size*/
-@media only screen and (min-width: 390px) {
-    #details_section li {
-        padding-bottom: 8px;
-    }
-}
-
-/* computer screen size */
-@media only screen and (min-width: 1600px) {
     #details_section li {
         padding: 0 10px 10px 0;
     }
@@ -617,45 +597,6 @@ h3 {
     }
 }
 
-#pomodoro_start:hover {
-    outline: 2px solid #30c862;
-    transition: 0.2s;
-}
-
-#pomodoro_start:active {
-    color: #30c862;
-    outline: 2px solid #30c862;
-    transition: 0.2s;
-}
-
-#pomodoro_stop:hover {
-    outline: 2px solid #fe5157;
-    transition: 0.2s;
-}
-
-#pomodoro_stop:active {
-    color: #fe5157;
-    outline: 2px solid #fe5157;
-    transition: 0.2s;
-}
-
-#pomodoro_reset:hover {
-    outline: 2px solid #fed449;
-    transition: 0.2s;
-}
-
-#pomodoro_reset:active {
-    color: #fed449;
-    outline: 2px solid #fed449;
-    transition: 0.2s;
-}
-
-/* Pomodoro Settings button */
-#settings_button {
-    position: absolute;
-    top: 20px;
-    left: calc(50% + 108px);
-}
 
 
 /* API REQUEST FORM */
@@ -678,24 +619,20 @@ h3 {
 }
 
 
+
 /* Dictionary window */
 #dictionary {
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     flex-direction: column;
 }
 
 .dictionary_findings {
-    background-color: #f0f1f3;
     padding: 10px 15px;
     margin-bottom: 20px;
     position: relative;
     border-radius: 12px;
-}
-
-.dark_mode .dictionary_findings {
-    background-color: #131313;
 }
 
 /* iPhone 12 Pro screen size*/
@@ -715,6 +652,8 @@ h3 {
 .dictionary_findings p {
     padding-bottom: 5px;
 }
+
+
 
 /* Dictionary findings close button */
 .findings_close_button {

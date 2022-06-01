@@ -18,7 +18,7 @@
     <body>
         <!-- HEADER section -->
         <header class="main_background">
-            <h1 class="main_text"><b id="bold_title">Stud</b>Bud</h1>
+            <h1 class="main_text"><b class="bold_title">Stud</b>Bud</h1>
 
             <!-- Light/Dark Mode button -->
             <div id="theme_switch_box">
@@ -30,19 +30,19 @@
         <main class="main_background main_text">
 
             <!-- Tasks and Kanban board section -->
-            <div class="tasks_section">
+            <section class="tasks_section">
                 <h2>Tasks</h2>
                 <div id="kanban_board">
                     <!-- Kanban columns are dynamically loaded here from localstorage using JS
                     ,where the first column is the task list -->
                 </div>
-            </div>
+            </section>
 
             <!-- Container for the Pomodoro and Stopwatch timers -->
             <div class="features_container">
 
                 <!-- Pomodoro timer section -->
-                <div class="smaller_feature" id="pomodoro_feature">
+                <section class="smaller_feature" id="pomodoro_feature">
                     <h2 class="main_text">Pomodoro</h2>
 
                     <!-- Pomodoro settings button to edit the time intervals -->
@@ -52,52 +52,52 @@
 
                     <div id="pomodoro">
                         <!-- Pomodoro time display -->
-                        <div class="time">
-                            <p id="pomodoro_minute" class="pomodoro_time_number">25</p>
+                        <div class="time main_text">
+                            <p class="pomodoro_time_number" id="pomodoro_minute">25</p>
                             <p class="pomodoro_time_number colon">:</p>
-                            <p id="pomodoro_second" class="pomodoro_time_number">00</p>
+                            <p class="pomodoro_time_number" id="pomodoro_second">00</p>
                         </div>
 
                         <!-- Buttons to control the Pomodoro timer -->
                         <div class="buttons_container">
-                            <button id="pomodoro_start" class="buttons">Start</button>
-                            <button id="pomodoro_stop" class="buttons">Stop</button>
-                            <button id="pomodoro_reset" class="buttons">Reset</button>
+                            <button class="buttons time_start" id="pomodoro_start">Start</button>
+                            <button class="buttons time_stop" id="pomodoro_stop">Stop</button>
+                            <button class="buttons time_reset" id="pomodoro_reset">Reset</button>
                         </div>
                     </div>
 
                     <!-- Pomodoro Settings are dynamically inserted here from JS when settings_button is clicked -->
-                </div>
+                </section>
 
                 <!-- Stopwatch timer section -->
-                <div class="smaller_feature">
+                <section class="smaller_feature">
                     <h2 class="main_text">Stopwatch</h2>
 
                     <div class="stopwatch">
                         <!-- Stopwatch time display -->
-                        <div class="time">
-                            <p id="stopwatch_hour" class="stopwatch_time_number">00</p>
+                        <div class="time main_text">
+                            <p class="stopwatch_time_number" id="stopwatch_hour">00</p>
                             <p class="stopwatch_time_number colon">:</p>
-                            <p id="stopwatch_minute" class="stopwatch_time_number">00</p>
+                            <p class="stopwatch_time_number" id="stopwatch_minute">00</p>
                             <p class="stopwatch_time_number colon">:</p>
-                            <p id="stopwatch_second" class="stopwatch_time_number">00</p>
+                            <p class="stopwatch_time_number" id="stopwatch_second">00</p>
                         </div>
 
                         <!-- Buttons to control the Stopwatch timer -->
                         <div class="buttons_container">
-                            <button id="stopwatch_start" class="buttons">Start</button>
-                            <button id="stopwatch_stop" class="buttons">Stop</button>
-                            <button id="stopwatch_reset" class="buttons">Reset</button>
+                            <button class="buttons time_start" id="stopwatch_start">Start</button>
+                            <button class="buttons time_stop" id="stopwatch_stop">Stop</button>
+                            <button class="buttons time_reset" id="stopwatch_reset">Reset</button>
                         </div>
                     </div>
-                </div>
+                </section>
             </div>
 
             <!-- Container for the Dictionary and Music Player -->
             <div class="features_container">
 
                 <!-- Dictionary -->
-                <div class="smaller_feature" id="dictionary">
+                <section class="smaller_feature" id="dictionary">
                     <h2 class="main_text">Dictionary</h2>
 
                     <!-- API request form -->
@@ -111,12 +111,19 @@
                     </div>
 
                     <!-- The results for a word's definition and synonyms are dynamically inserted here using JS -->
-                </div>
+                </section>
 
                 <!-- Music Player -->
-                <div class="smaller_feature">
+                <section class="smaller_feature">
                     <h2 class="main_text">Music Player</h2>
-                </div>
+
+                    <!-- Embedded music player using Spotify -->
+                    <iframe id="embedded_music_player" style="border-radius:12px"
+                            src="https://open.spotify.com/embed/playlist/471N195f5jAVs086lzYglw?utm_source=generator&theme=white"
+                            width="100%" height="80" frameBorder="0" allowfullscreen=""
+                            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture">
+                    </iframe>
+                </section>
             </div>
         </main>
 

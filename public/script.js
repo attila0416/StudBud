@@ -1,56 +1,83 @@
 // main function
 window.onload = function () {
+    // light/dark mode
     checkThemeOnLoad();
     addThemeButtonEventListener();
 
+    // kanban board
     loadKanbanBoard();
 
+    // timers: stopwatch and pomodoro
     addStopwatchEventListeners();
     addPomodoroEventListeners();
 
+    // dictionary
     addDictionarySearchLEventListener();
 }
 
 
-// Dark mode functionality
+
+// DARK MODE functionality section
 var DARK_MODE_TEXT = "dark_mode";
 var LIGHT_MODE_TEXT = "light_mode";
 
+// check what theme colour is saved in local storage and change the theme accordingly
 function checkThemeOnLoad() {
     let storedTheme = localStorage.getItem("theme");
     if (storedTheme === null) {
         localStorage.setItem("theme", LIGHT_MODE_TEXT)
         document.getElementById("switch_button_icon").textContent = "light_mode";
+        setMusicPlayerToLightMode();
     } else if (storedTheme === DARK_MODE_TEXT) {
         toggleDarkMode();
         document.getElementById("switch_button_icon").textContent = "dark_mode";
+        setMusicPlayerToDarkMode();
     }
 }
 
+// activate dark mode
 function toggleDarkMode() {
     const htmlBodySection = document.body;
     htmlBodySection.classList.toggle(DARK_MODE_TEXT);
 }
 
+// add event listener for the light/dark mode button
 function addThemeButtonEventListener() {
     let themeButton = document.getElementById("theme_switch_box");
     themeButton.addEventListener("click", changeTheme);
 }
 
+// change the theme depending on the current active one
 function changeTheme() {
     toggleDarkMode();
     let storedTheme = localStorage.getItem("theme");
     if (storedTheme === LIGHT_MODE_TEXT) {
         localStorage.setItem("theme", DARK_MODE_TEXT)
         document.getElementById("switch_button_icon").textContent = "dark_mode";
+        setMusicPlayerToDarkMode();
     } else {
         localStorage.setItem("theme", LIGHT_MODE_TEXT)
         document.getElementById("switch_button_icon").textContent = "light_mode";
+        setMusicPlayerToLightMode();
     }
 }
 
+// set the colour of the embedded music player to light
+function setMusicPlayerToLightMode() {
+    let music_player = document.getElementById("embedded_music_player");
+    music_player.src = "https://open.spotify.com/embed/playlist/471N195f5jAVs086lzYglw?utm_source=generator&theme=white";
+}
 
-// Kanban Column functionality
+// set the colour of the embedded music player to dark
+function setMusicPlayerToDarkMode() {
+    let music_player = document.getElementById("embedded_music_player");
+    music_player.src = "https://open.spotify.com/embed/playlist/471N195f5jAVs086lzYglw?utm_source=generator&theme=0";
+}
+
+
+
+// KANBAN BOARD functionality section
+// add a kanban column to the board and change the localstorage accordingly
 function addColumn() {
     let columnsFromStorage = localStorage.getItem("columns");
     let columns = JSON.parse(columnsFromStorage);
@@ -88,6 +115,7 @@ function addColumn() {
     }
 }
 
+// load in the kanban board from localstorage when website starts
 function loadKanbanBoard() {
     let columnOneId = 'column1';
     let columns = {};
@@ -117,6 +145,7 @@ function loadKanbanBoard() {
     addEventListenerForColumnClose();
 }
 
+// add event listeners for the buttons that enable column adding
 function addEventListenerForAddColumn() {
     let addKanbanColumn = document.getElementById("add_kanban_column");
     if (addKanbanColumn != null) {
@@ -124,6 +153,7 @@ function addEventListenerForAddColumn() {
     }
 }
 
+// add event listeners for the buttons that enable column closing
 function addEventListenerForColumnClose() {
     let closeButton = document.getElementsByClassName("close_column_button");
     for (let j = 0; j < closeButton.length; j++) {
@@ -131,6 +161,7 @@ function addEventListenerForColumnClose() {
     }
 }
 
+// close the columns and make changes to localstorage accordingly
 function closeColumn() {
     let column = this.parentNode.parentNode;
     let columnId = column.id;
@@ -151,7 +182,7 @@ function closeColumn() {
     addEventListenerForColumnClose();
 }
 
-
+// returns html code for the task list that will be dynamically added to the website
 function addKanbanTaskListHTML() {
     return `<div class='kanban_column main_background' id='column1'>
                 <div class='kanban_column_heading'>
@@ -161,6 +192,7 @@ function addKanbanTaskListHTML() {
             </div>`;
 }
 
+// returns html code for the other columns which will be dynamically added to the website
 function addKanbanColumnHTML(columnId) {
     return `<div class='kanban_column main_background' id=${columnId}>
                 <div class='kanban_column_heading'>
@@ -173,6 +205,7 @@ function addKanbanColumnHTML(columnId) {
             </div>`;
 }
 
+// returns html code for the button that enables column adding which will be dynamically added to the website
 function addKanbanColumnAddButtonHTML() {
     return `<button type='button' id='add_kanban_column' class='main_text'>
                 <span class='material-symbols-rounded md-18'>add</span> Add column
@@ -180,13 +213,15 @@ function addKanbanColumnAddButtonHTML() {
 }
 
 
-// Stopwatch functionality
+
+// STOPWATCH functionality section
 var stopwatchSecond = 0;
 var stopwatchMinute = 0;
 var stopwatchHour = 0;
 var stopwatchStartTimer = null;
 var currentActiveStopwatchButton = "Reset";
 
+// add event listeners for the three buttons that control the stopwatch
 function addStopwatchEventListeners() {
     let startButton = document.getElementById("stopwatch_start");
     let stopButton = document.getElementById("stopwatch_stop");
@@ -196,6 +231,7 @@ function addStopwatchEventListeners() {
     resetButton.addEventListener("click", resetStopwatch);
 }
 
+// start timer for the stopwatch, which controls the time passed
 function startStopWatch() {
     if (currentActiveStopwatchButton !== "Start") {
         currentActiveStopwatchButton = "Start";
@@ -221,6 +257,7 @@ function startStopWatch() {
     }
 }
 
+// stop the timer for the stopwatch
 function stopStopwatch() {
     if (currentActiveStopwatchButton === "Start") {
         currentActiveStopwatchButton = "Stop";
@@ -229,6 +266,7 @@ function stopStopwatch() {
     }
 }
 
+// reset the time passed back to zero
 function resetStopwatch() {
     currentActiveStopwatchButton = "Reset";
     stopwatchSecond = 0;
@@ -239,12 +277,14 @@ function resetStopwatch() {
     setPropertyOfClass("stopwatch_time_number", "color", "");
 }
 
+// set the time that is displayed to the user
 function setStopwatchTimer(hour, minute, second) {
     document.getElementById("stopwatch_hour").innerText = hour;
     document.getElementById("stopwatch_minute").innerText = minute;
     document.getElementById("stopwatch_second").innerText = second;
 }
 
+// change the css property of a class
 function setPropertyOfClass(className, property, value) {
     let classItems = document.getElementsByClassName(className);
     for (let i = 0; i < classItems.length; i++) {
@@ -254,7 +294,8 @@ function setPropertyOfClass(className, property, value) {
 }
 
 
-// Pomodoro functionality
+
+// POMODORO functionality section
 var session = 25;
 var shortBreak = 5;
 var cycles = 4;
@@ -267,6 +308,7 @@ var currentPomodoroTimer = "Session";
 var pomodoroSecondsLeft = 0;
 var pomodoroMinuteLeft = session;
 
+// add event listeners for the buttons that control the pomodoro timer
 function addPomodoroEventListeners() {
     let startButton = document.getElementById("pomodoro_start");
     let stopButton = document.getElementById("pomodoro_stop");
@@ -278,6 +320,7 @@ function addPomodoroEventListeners() {
     settingsButton.addEventListener("click", activatePomodoroSettings);
 }
 
+// start the timer for the pomodoro and calculate which pomodoro time it should be showing
 function startPomodoro() {
     if (currentActivePomodoroButton !== "Start") {
         currentActivePomodoroButton = "Start";
@@ -302,7 +345,6 @@ function startPomodoro() {
                 }
             } else if (currentPomodoroTimer === "Short Break") {
                 countdown();
-
                 if (pomodoroSecondsLeft === 0 && pomodoroMinuteLeft === 0) {
                     currentCycle += 1;
                     currentPomodoroTimer = "Session";
@@ -311,7 +353,6 @@ function startPomodoro() {
                 }
             } else if (currentPomodoroTimer === "Long Break") {
                 countdown();
-
                 if (pomodoroSecondsLeft === 0 && pomodoroMinuteLeft === 0) {
                     resetPomodoro();
                     return;
@@ -332,6 +373,7 @@ function startPomodoro() {
     }
 }
 
+// count down seconds and minutes for the pomodoro timer
 function countdown() {
     if (pomodoroSecondsLeft === 0) {
         pomodoroSecondsLeft = 60;
@@ -340,6 +382,7 @@ function countdown() {
     pomodoroSecondsLeft--;
 }
 
+// stop the countdown for the pomodoro timer
 function stopPomodoro() {
     if (currentActivePomodoroButton === "Start") {
         currentActivePomodoroButton = "Stop";
@@ -348,6 +391,7 @@ function stopPomodoro() {
     }
 }
 
+// reset the pomodoro completely, including cycles done and the time passed
 function resetPomodoro() {
     currentActivePomodoroButton = "Reset";
     currentCycle = 0;
@@ -363,6 +407,7 @@ function resetPomodoro() {
     setPropertyOfClass("pomodoro_time_number", "color", "");
 }
 
+// update the time period for the session, cycle and breaks
 function updatePomodoroSettings() {
     let sessionValue = document.getElementById("session");
     let shortBreakValue = document.getElementById("short_break");
@@ -377,21 +422,24 @@ function updatePomodoroSettings() {
     }
 }
 
+// checks if the user input for the time is valid
 function isValidTime(value) {
     return value !== "" && value >= 1 && value <= 60;
 }
 
+// checks if the user input for the cycles is valid
 function isValidCycles(value) {
     return value !== "" && value >= 0 && value <= 99;
 }
 
+// set the time that is displayed for the user on the pomodoro timer
 function setPomodoroTimer(minute, second) {
     document.getElementById("pomodoro_minute").innerText = minute;
     document.getElementById("pomodoro_second").innerText = second;
 }
 
 var pomodoroSettingsActive = false;
-
+// display or remove the pomodoro settings for the user depending on its current state
 function activatePomodoroSettings() {
     if (!pomodoroSettingsActive) {
         let pomodoroSection = document.getElementById("pomodoro_feature");
@@ -408,6 +456,7 @@ function activatePomodoroSettings() {
     }
 }
 
+// return the pomodoro settings html that is dynamically inserted into the website
 function pomodoroSettingsHTML() {
     return `<!-- POMODORO SETTINGS form -->
             <form id="pomodoro_settings_form" onsubmit="return false">
@@ -437,15 +486,17 @@ function pomodoroSettingsHTML() {
                         <input id="long_break" class="input_field pomodoro_input_field" name="long_break" type="number" maxlength="2" min="1" max="60" value=${longBreak} required>
                     </li>
                 </ul>
-                <button type="submit" id="pomodoro_update_button" class="buttons general_buttons">Update</button>
+                <button type="submit" class="buttons general_buttons" id="pomodoro_update_button">Update</button>
             </form>`;
 }
 
+// add event listener to the dictionary search button that sends an API request
 function addDictionarySearchLEventListener() {
     let dictionarySearchButton = document.getElementById("dictionary_search");
     dictionarySearchButton.addEventListener("click", dictionaryApiRequest);
 }
 
+// send an API request to get the meaning of a word
 function dictionaryApiRequest() {
     let wordRequested = document.getElementById("definition");
     if (wordRequested.value !== "") {
@@ -479,11 +530,11 @@ function dictionaryApiRequest() {
 }
 
 var fingingsId = 0;
-
+// display the found definitions and synonyms to the user on the website
 function showDictionaryResults(meanings_json, word) {
     let dictionary = document.getElementById("dictionary");
     let dictionaryFindingsId = "dictionary_findings" + fingingsId;
-    dictionary.innerHTML += `<div id=${dictionaryFindingsId} class="dictionary_findings">
+    dictionary.innerHTML += `<div id=${dictionaryFindingsId} class="dictionary_findings main_background">
                                 <!-- Close the findings window -->
                                 <button type='button' class='main_text general_circle_button findings_close_button'>
                                     <span class='material-symbols-rounded'>close</span>
@@ -523,9 +574,10 @@ function showDictionaryResults(meanings_json, word) {
     fingingsId += 1;
 }
 
+// display to the user that no definition was found for the word they searched
 function showUnsuccessfulDictionarySearch(word) {
     let dictionary = document.getElementById("dictionary");
-    dictionary.innerHTML += `<div id="dictionary_findings" class="dictionary_findings">
+    dictionary.innerHTML += `<div id="dictionary_findings" class="dictionary_findings main_background">
                                 <!-- Close the findings window -->
                                 <button type='button' class='main_text general_circle_button findings_close_button'>
                                     <span class='material-symbols-rounded'>close</span>
@@ -538,6 +590,7 @@ function showUnsuccessfulDictionarySearch(word) {
     fingingsId += 1;
 }
 
+// delete the value from the input field that user entered a word into after they submitted the form
 function resetValueOfInputField(field) {
     field.required = false;
     field.value = "";
@@ -546,6 +599,7 @@ function resetValueOfInputField(field) {
     }, 10);
 }
 
+// add an event listener for the close button on each findings field
 function addDictionaryCloseButtonsEventListeners() {
     let closeButtons = document.getElementsByClassName("findings_close_button");
     for (let j = 0; j < closeButtons.length; j++) {
@@ -553,6 +607,7 @@ function addDictionaryCloseButtonsEventListeners() {
     }
 }
 
+// close the specified findings window
 function closeDefinitionFindings() {
     let definitionFindings = this.parentNode;
     definitionFindings.remove();
