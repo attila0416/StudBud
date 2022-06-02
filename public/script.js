@@ -6,6 +6,7 @@ window.onload = function () {
 
     // kanban board
     loadKanbanBoard();
+    addEventListenerForAddTask();
 
     // timers: stopwatch and pomodoro
     addStopwatchEventListeners();
@@ -101,17 +102,17 @@ function addColumn() {
         }
 
         let columnId = "column" + firstAvailableKeyNumber.toString();
+        columns[columnId] = {"name": "Type name here", "tasks": {}};
+        localStorage.setItem("columns", JSON.stringify(columns));
         if (numberOfColumns === 1) {
-            columns[columnId] = {"name": "Type name here", "tasks": []};
-            localStorage.setItem("columns", JSON.stringify(columns));
             kanbanBoard.innerHTML += addKanbanColumnHTML(columnId) + addKanbanColumnAddButtonHTML();
         } else if (numberOfColumns === 2) {
-            columns[columnId] = {"name": "Type name here", "tasks": []};
-            localStorage.setItem("columns", JSON.stringify(columns));
             kanbanBoard.innerHTML += addKanbanColumnHTML(columnId);
         }
         addEventListenerForAddColumn();
         addEventListenerForColumnClose();
+        addEventListenerForColumnTitleInput();
+        addEventListenerForAddTask();
     }
 }
 
@@ -119,7 +120,7 @@ function addColumn() {
 function loadKanbanBoard() {
     let columnOneId = 'column1';
     let columns = {};
-    columns[columnOneId] = {"name": "Type column name here", "tasks": []};
+    columns[columnOneId] = {"name": "Task List", "tasks": {}};
     if (localStorage.getItem("columns") == null) {
         localStorage.setItem("columns", JSON.stringify(columns));
     }
@@ -132,17 +133,14 @@ function loadKanbanBoard() {
 
     for (let i = 0; i < columnKeys.length; i++) {
         let key = columnKeys[i];
-        if (key === 'column1') {
-            kanbanBoard.innerHTML += addKanbanTaskListHTML(key);
-        } else {
-            kanbanBoard.innerHTML += addKanbanColumnHTML(key);
-        }
+        kanbanBoard.innerHTML += addKanbanColumnHTML(key);
     }
     if (numberOfColumns < 3) {
         kanbanBoard.innerHTML += addKanbanColumnAddButtonHTML();
         addEventListenerForAddColumn();
     }
     addEventListenerForColumnClose();
+    addEventListenerForColumnTitleInput();
 }
 
 // add event listeners for the buttons that enable column adding
@@ -180,36 +178,147 @@ function closeColumn() {
     }
     addEventListenerForAddColumn();
     addEventListenerForColumnClose();
+    addEventListenerForColumnTitleInput();
+    addEventListenerForAddTask();
 }
 
-// returns html code for the task list that will be dynamically added to the website
-function addKanbanTaskListHTML() {
-    return `<div class='kanban_column main_background' id='column1'>
-                <div class='kanban_column_heading'>
-                    <h3>Task List | </h3>
-                </div>
-                <div class='task'></div>
-            </div>`;
-}
-
-// returns html code for the other columns which will be dynamically added to the website
+// returns html code for columns which will be dynamically added to the website
 function addKanbanColumnHTML(columnId) {
-    return `<div class='kanban_column main_background' id=${columnId}>
-                <div class='kanban_column_heading'>
-                    <h3 contenteditable='true'> ${columnId} Task List | </h3>
-                    <button type='button' class='close_column_button general_circle_button main_text'>
-                        <span class='material-symbols-rounded md-18'>close</span>
-                    </button>
-                </div>
-                <div class='task'></div>
-            </div>`;
+    let columnName = getColumnName(columnId);
+    let htmlToBeReturned = `<div class='kanban_column main_background' id=${columnId}>
+                                <div class='kanban_column_heading'>`;
+    if (columnId === "column1") {
+        htmlToBeReturned += `<h3>${columnName}</h3>`;
+    } else {
+        htmlToBeReturned += `<h3 contenteditable="true" class="title_input">${columnName}</h3>`;
+    }
+
+    let numberOfTasks = getNumberOfTasksInColumn(columnId);
+    htmlToBeReturned += `<p class="column_title_divider">|</p>
+                         <p class="column_task_count">${numberOfTasks}</p>`;
+
+    if (columnId !== "column1") {
+        htmlToBeReturned += addCloseColumnButtonHTML();
+    }
+
+    htmlToBeReturned += `</div>
+                         <div class='tasks_container'><div class="tasks"></div>`;
+
+    if (columnId === "column1") {
+        htmlToBeReturned += addTaskButtonHTML();
+    }
+
+    htmlToBeReturned += `</div></div>`;
+
+    return htmlToBeReturned;
 }
 
 // returns html code for the button that enables column adding which will be dynamically added to the website
 function addKanbanColumnAddButtonHTML() {
-    return `<button type='button' id='add_kanban_column' class='main_text'>
+    return `<button type='button' id='add_kanban_column' class='main_text add_button white_background'>
                 <span class='material-symbols-rounded md-18'>add</span> Add column
             </button>`;
+}
+
+// get the number of tasks stored under a column from the data base
+function getNumberOfTasksInColumn(columnId) {
+    let columnsFromStorage = localStorage.getItem("columns");
+    let columnsParsed = JSON.parse(columnsFromStorage);
+    return Object.keys(columnsParsed[columnId]["tasks"]).length;
+}
+
+// return the html code for the Close Column button that will be dynamically added to the website
+function addCloseColumnButtonHTML() {
+    return `<button type='button' class='close_column_button general_circle_button main_text'>
+                <span class='material-symbols-rounded md-18'>close</span>
+            </button>`;
+}
+
+// return the html code for the Add Task button that will be dynamically added to the website
+function addTaskButtonHTML() {
+    return `<button type='button' id='add_task_button' class='main_text add_button main_background'>
+                <span class='material-symbols-rounded'>add</span> Add task
+            </button>`;
+}
+
+// add event listeners for the title of each column
+function addEventListenerForColumnTitleInput() {
+    let titleInput = document.getElementsByClassName("title_input");
+    for (let j = 0; j < titleInput.length; j++) {
+        titleInput[j].addEventListener("keydown", updateTitleBefore);
+        titleInput[j].addEventListener("keyup", updateTitleAfter);
+        titleInput[j].addEventListener("click", removePlaceholderForTitle);
+        titleInput[j].addEventListener("blur", resetPlaceholderForTitle);
+    }
+}
+
+var currentTitleBeingEdited = "";
+// update the title of the column after key was pressed
+function updateTitleAfter(event) {
+    if (this.innerHTML.length >= 18 && event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') {
+        event.preventDefault();
+        this.innerHTML = currentTitleBeingEdited;
+        return;
+    }
+    if (this.innerHTML.length === 0) {
+        event.target.focus();
+    }
+    currentTitleBeingEdited = this.innerHTML;
+    updateColumnNameInDatabase(this);
+}
+
+// check the title before the key is released and if "Enter" is pressed then release the focus from the input field
+function updateTitleBefore(event) {
+    currentTitleBeingEdited = this.innerHTML;
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        event.target.blur();
+    }
+}
+
+// remove the placeholder text that is displayed to the user for the column title
+function removePlaceholderForTitle() {
+    if (this.innerHTML === "Type name here") {
+        this.innerHTML = "";
+    }
+}
+
+// add back the placeholder text that is displayed to the user for the column title
+function resetPlaceholderForTitle() {
+    if (this.innerHTML === "") {
+        this.innerHTML = "Type name here";
+    }
+    currentTitleBeingEdited = this.innerHTML;
+    updateColumnNameInDatabase(this);
+}
+
+// save/update the title of the column in the database
+function updateColumnNameInDatabase(currentTitle) {
+    let column = currentTitle.parentNode.parentNode;
+    let columnId = column.id;
+    let columnsFromStorage = localStorage.getItem("columns");
+    let columnsParsed = JSON.parse(columnsFromStorage);
+    columnsParsed[columnId]["name"] = currentTitleBeingEdited;
+    localStorage.setItem("columns", JSON.stringify(columnsParsed));
+}
+
+// get the current title of the column from the database
+function getColumnName(columnId) {
+    let columnsFromStorage = localStorage.getItem("columns");
+    let columnsParsed = JSON.parse(columnsFromStorage);
+    return columnsParsed[columnId]["name"];
+}
+
+// add event listener for the Add Task button
+function addEventListenerForAddTask() {
+    let addTaskButton = document.getElementById("add_task_button");
+    addTaskButton.addEventListener("click", addTaskToTaskList);
+}
+
+// add a task to the first column, which is the task List
+function addTaskToTaskList() {
+    // todo add task
+    console.log("add task");
 }
 
 

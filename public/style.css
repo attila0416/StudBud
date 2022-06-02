@@ -230,14 +230,14 @@ h3 {
 
 
 /* Kanban Board */
-.tasks_section {
+.kanban_board_section {
     border-radius: 15px;
     margin-bottom: 30px;
     box-shadow: rgba(0, 0, 0, 0.09) 0 8px 24px;
     background-color: white;
 }
 
-.dark_mode .tasks_section {
+.dark_mode .kanban_board_section {
     background-color: #212121;
 }
 
@@ -249,11 +249,12 @@ h3 {
     background-color: #f0f1f3;
     border-radius: 12px;
     margin: 0 45px 30px 45px;
+    min-height: 110px;
 }
 
 /* iPhone 12 Pro screen size*/
 @media only screen and (min-width: 390px) {
-    .tasks_section {
+    .kanban_board_section {
         width: 350px;
     }
 
@@ -269,7 +270,7 @@ h3 {
 
 /* computer screen size */
 @media only screen and (min-width: 1600px) {
-    .tasks_section {
+    .kanban_board_section {
         width: 1350px;
     }
 
@@ -286,45 +287,41 @@ h3 {
 
 
 
-/* ADD COLUMN BUTTON + its DARK MODE */
-#add_kanban_column {
+/* ADD COLUMN and TASK BUTTON + its DARK MODE */
+.add_button {
     border: none;
     text-decoration: none;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 360px;
     height: 29px;
     font-weight: 500;
     margin: 8px 45px 25px 45px;
     border-radius: 7px;
-    background-color: white;
     outline: 2px solid black;
 }
 
-#add_kanban_column:hover {
+.add_button:hover {
     outline: 2px solid #3f71e6;
     transition: 0.2s;
 }
 
-#add_kanban_column:active {
+.add_button:active {
     color: #3f71e6;
     outline: 2px solid #3f71e6;
     transition: 0.2s;
 }
 
-.dark_mode #add_kanban_column {
+.dark_mode .add_button {
     outline: 2px solid white;
-    background-color: #212121;
 }
 
-.dark_mode #add_kanban_column:hover {
-    background-color: #212121;
+.dark_mode .add_button:hover {
     outline: 2px solid #3f71e6;
     transition: 0.2s;
 }
 
-.dark_mode #add_kanban_column:active {
+.dark_mode .add_button:active {
     color: #3f71e6;
     outline: 2px solid #3f71e6;
     transition: 0.2s;
@@ -344,11 +341,14 @@ h3 {
     }
 }
 
+
+
+/* Column heading */
 .kanban_column_heading {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     align-items: center;
+    position: relative;
     border-bottom: 2px solid #e2e3e5;
     height: 50px;
     padding: 10px 15px;
@@ -358,10 +358,86 @@ h3 {
     border-bottom: 2px solid #1a1a1a;
 }
 
+.close_column_button {
+    position: absolute;
+    right: 15px;
+}
+
+.title_input {
+    padding: 5px 5px;
+    border-radius: 5px;
+    max-width: 190px;
+    font-weight: 700;
+    font-size: 14pt;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.title_input:focus {
+    outline: 1px solid black;
+}
+
+.dark_mode .title_input:focus {
+    outline: 1px solid white;
+}
+
+.column_task_count {
+    opacity: 0.5;
+    font-weight: 500;
+    font-size: 14pt;
+}
+
+.column_title_divider {
+    padding: 0 10px;
+    font-weight: 500;
+    font-size: 14pt;
+}
+
+
+
+/* Tasks */
+#add_task_button {
+    margin: 17px 0 17px 0;
+}
+
+/* iPhone 12 Pro screen size*/
+@media only screen and (min-width: 390px) {
+    #add_task_button {
+        width: 260px;
+    }
+}
+
+/* computer screen size */
+@media only screen and (min-width: 1600px) {
+    #add_task_button {
+        width: 320px;
+    }
+}
+
+.tasks_container {
+    /* todo */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 63px;
+    /*outline: 2px solid black;*/
+}
+
+.tasks {
+    /* todo */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    /*outline: 2px solid #3f71e6;*/
+}
+
 .task {
-    height: 200px;
-    width: 300px;
-    /*background-color: white;*/
+    /* todo */
+    height: 50px;
+    width: 100px;
+    outline: 2px solid black;
+    margin: 10px;
 }
 
 
@@ -384,6 +460,14 @@ h3 {
 
 .dark_mode .smaller_feature {
     background-color: #212121;
+}
+
+#music_player {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
 }
 
 /* iPhone 12 Pro screen size*/
