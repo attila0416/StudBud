@@ -364,7 +364,7 @@ function taskHTML(taskId, task, priority, due_date, length, progress) {
                                     </label>
                                     <input class="input_field task_input_field task_description_input"
                                         name="task_description" placeholder="Task description" type="text" required
-                                        value=${task}>
+                                        value="${task}">
                                 </li>
                                 
                                 <!-- Priority input field -->
@@ -933,7 +933,7 @@ function showDictionaryResults(meanings_json, word) {
             for (let j = 0; j < meanings_json[i]["synonyms"]["length"]; j++) {
                 if (/^[A-Za-z0-9 ]*$/.test(meanings_json[i]["synonyms"][j]) === true) {
                     if (allSynonyms === ``) {
-                        allSynonyms += `${meanings_json[i]["synonyms"][j]} `;
+                        allSynonyms += `${meanings_json[i]["synonyms"][j]}`;
                     } else {
                         allSynonyms += `, ${meanings_json[i]["synonyms"][j]}`;
                     }
