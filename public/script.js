@@ -6,7 +6,6 @@ window.onload = function () {
 
     // kanban board
     loadKanbanBoard();
-    addEventListenerForAddTask();
 
     // timers: stopwatch and pomodoro
     addStopwatchEventListeners();
@@ -109,10 +108,8 @@ function addColumn() {
         } else if (numberOfColumns === 2) {
             kanbanBoard.innerHTML += addKanbanColumnHTML(columnId);
         }
-        addEventListenerForAddColumn();
-        addEventListenerForColumnClose();
-        addEventListenerForColumnTitleInput();
-        addEventListenerForAddTask();
+        removeKanbanBoard();
+        loadKanbanBoard();
     }
 }
 
@@ -141,6 +138,8 @@ function loadKanbanBoard() {
     }
     addEventListenerForColumnClose();
     addEventListenerForColumnTitleInput();
+    addEventListenerForAddTask();
+    taskEventListeners();
 }
 
 // add event listeners for the buttons that enable column adding
@@ -176,10 +175,8 @@ function closeColumn() {
     if (numberOfColumns === 2) {
         kanbanBoard.innerHTML += addKanbanColumnAddButtonHTML();
     }
-    addEventListenerForAddColumn();
-    addEventListenerForColumnClose();
-    addEventListenerForColumnTitleInput();
-    addEventListenerForAddTask();
+    removeKanbanBoard();
+    loadKanbanBoard();
 }
 
 // returns html code for columns which will be dynamically added to the website
@@ -201,12 +198,13 @@ function addKanbanColumnHTML(columnId) {
         htmlToBeReturned += addCloseColumnButtonHTML();
     }
 
-    htmlToBeReturned += `</div>
-                         <div class='tasks_container'><div class="tasks"></div>`;
+    htmlToBeReturned += `</div><div class='tasks_container'><div class="tasks">`;
 
-    if (columnId === "column1") {
-        htmlToBeReturned += addTaskButtonHTML();
-    }
+    htmlToBeReturned += addAllTasks(columnId);
+
+    htmlToBeReturned += `</div>`;
+
+    htmlToBeReturned += addTaskButtonHTML();
 
     htmlToBeReturned += `</div></div>`;
 
@@ -236,7 +234,7 @@ function addCloseColumnButtonHTML() {
 
 // return the html code for the Add Task button that will be dynamically added to the website
 function addTaskButtonHTML() {
-    return `<button type='button' id='add_task_button' class='main_text add_button main_background'>
+    return `<button type='button' class='add_task_button main_text add_button main_background'>
                 <span class='material-symbols-rounded'>add</span> Add task
             </button>`;
 }
@@ -311,15 +309,287 @@ function getColumnName(columnId) {
 
 // add event listener for the Add Task button
 function addEventListenerForAddTask() {
-    let addTaskButton = document.getElementById("add_task_button");
-    addTaskButton.addEventListener("click", addTaskToTaskList);
+    let addTaskButtons = document.getElementsByClassName("add_task_button");
+    for (let i = 0; i < addTaskButtons.length; i++) {
+        addTaskButtons[i].addEventListener("click", addTaskToTaskList);
+    }
 }
 
 // add a task to the first column, which is the task List
 function addTaskToTaskList() {
-    // todo add task
-    console.log("add task");
+    let tasksContainer = this.parentNode.getElementsByClassName("tasks")[0];
+    if (localStorage.getItem("firstAvailableTaskId") == null) {
+        localStorage.setItem("firstAvailableTaskId", JSON.stringify(0));
+    }
+    let taskId = JSON.parse(localStorage.getItem("firstAvailableTaskId"));
+    let nextAvailableTaskId = taskId + 1;
+    localStorage.setItem("firstAvailableTaskId", JSON.stringify(nextAvailableTaskId));
+    tasksContainer.innerHTML += taskHTML(taskId, "", "", "", "");
+
+    let column = this.parentNode.parentNode;
+    let columnId = column.id;
+    let columnsFromStorage = localStorage.getItem("columns");
+    let columnsParsed = JSON.parse(columnsFromStorage);
+    columnsParsed[columnId]["tasks"][taskId] = {"task": "",
+                                                "priority": "",
+                                                "due_date": "",
+                                                "length": "",
+                                                "progress": ""};
+    localStorage.setItem("columns", JSON.stringify(columnsParsed));
+    let numberOfTasks = getNumberOfTasksInColumn(columnId);
+    column.getElementsByClassName("column_task_count")[0].innerHTML = `${numberOfTasks}`;
+    removeKanbanBoard();
+    loadKanbanBoard();
 }
+
+// html for a task specified by the taskId
+function taskHTML(taskId, task, priority, due_date, length, progress) {
+    if (task === undefined || priority === undefined || due_date === undefined || length === undefined || progress === undefined) {
+        task = "";
+        priority = "";
+        due_date = "";
+        length = "";
+        progress = "";
+    }
+    let taskHTML = `<div id=${taskId} class="task white_background" draggable="true">
+                        <button type='button' class='main_text general_circle_button task_close_button'>
+                            <span class='material-symbols-rounded'>close</span>
+                        </button>
+                        <form class="task_form" onsubmit="return false">
+                            <ul>
+                                <!-- Task input field -->
+                                <li class="task_feature task_description">
+                                    <label class="task_label_icon">
+                                        Task:
+                                    </label>
+                                    <input class="input_field task_input_field task_description_input"
+                                        name="task_description" placeholder="Task description" type="text" required
+                                        value=${task}>
+                                </li>
+                                
+                                <!-- Priority input field -->
+                                <li class="task_feature task_priority">
+                                    <label class="task_label_icon">
+                                        Priority:
+                                    </label>
+                                    <select name="task_priority" 
+                                            class="input_field task_input_field task_priority_input" required>`;
+    if (priority === "Low") {
+        taskHTML += `<option value="">Select one</option>
+                      <option value="Low" selected>Low</option>
+                      <option value="Medium">Medium</option>
+                      <option value="High">High</option>`;
+    } else if (priority === "Medium") {
+        taskHTML += `<option value="">Select one</option>
+                      <option value="Low">Low</option>
+                      <option value="Medium" selected>Medium</option>
+                      <option value="High">High</option>`;
+    } else if (priority === "High") {
+        taskHTML += `<option value="">Select one</option>
+                      <option value="Low">Low</option>
+                      <option value="Medium">Medium</option>
+                      <option value="High" selected>High</option>`;
+    } else {
+        taskHTML += `<option value="">Select one</option>
+                      <option value="Low">Low</option>
+                      <option value="Medium">Medium</option>
+                      <option value="High">High</option>`;
+    }
+    taskHTML += `</select>
+                </li>
+                
+                <!-- Due date input field -->
+                <li class="task_feature task_due_date">
+                    <label class="task_label_icon">
+                        Due:
+                    </label>
+                    <input class="input_field task_input_field task_due_date_input" name="task_due_date" required
+                            type="date" value=${due_date}>
+                </li>
+                
+                <!-- Length input field -->
+                <li class="task_feature task_length">
+                    <label class="task_label_icon">
+                        Length (min):
+                    </label>
+                    <input class="input_field task_input_field task_length_input" name="task_length" required
+                            type="number" placeholder="60" min="1" value=${length}>
+                </li>
+                
+                <!-- Progress input field -->
+                <li class="task_feature task_progress">
+                    <label class="task_label_icon">
+                        Progress:
+                    </label>
+                    <select name="task_progress"
+                            class="input_field task_input_field task_progress_input" required>`;
+    if (progress === "Not Done") {
+        taskHTML += `<option value="">Select one</option>
+                      <option value="Not Done" selected>Not Done</option>
+                      <option value="In Progress">In Progress</option>
+                      <option value="Done">Done</option>`;
+    } else if (progress === "In Progress") {
+        taskHTML += `<option value="">Select one</option>
+                      <option value="Not Done">Not Done</option>
+                      <option value="In Progress" selected>In Progress</option>
+                      <option value="Done">Done</option>`;
+    } else if (progress === "Done") {
+        taskHTML += `<option value="">Select one</option>
+                      <option value="Not Done">Not Done</option>
+                      <option value="In Progress">In Progress</option>
+                      <option value="Done" selected>Done</option>`;
+    } else {
+        taskHTML += `<option value="">Select one</option>
+                      <option value="Not Done">Not Done</option>
+                      <option value="In Progress">In Progress</option>
+                      <option value="Done">Done</option>`;
+    }
+    taskHTML += `</select>
+                </li>
+            </ul>
+        <button type="submit" class="buttons general_buttons task_update_button">Update</button>
+    </form>
+    </div>`;
+    return taskHTML;
+}
+
+// html code for all the tasks in a column specified by the columnId
+function addAllTasks(columnId) {
+    let columnsFromStorage = localStorage.getItem("columns");
+    let columnsParsed = JSON.parse(columnsFromStorage);
+    let allTaskKeysForColumn = Object.keys(columnsParsed[columnId]["tasks"]);
+    let allTasksHTML = ``;
+    for (let i = 0; i < allTaskKeysForColumn["length"]; i++) {
+        let key = allTaskKeysForColumn[i];
+        let task = columnsParsed[columnId]["tasks"][key]["task"];
+        let priority = columnsParsed[columnId]["tasks"][key]["priority"];
+        let due_date = columnsParsed[columnId]["tasks"][key]["due_date"];
+        let length = columnsParsed[columnId]["tasks"][key]["length"];
+        let progress = columnsParsed[columnId]["tasks"][key]["progress"];
+        allTasksHTML += taskHTML(key, task, priority, due_date, length, progress);
+    }
+    return allTasksHTML;
+}
+
+// all event listeners for each task
+var oldColumnId = "";
+var newColumnId = "";
+function taskEventListeners() {
+    let allTasks = document.getElementsByClassName("task");
+    let allTaskContainers = document.getElementsByClassName("kanban_column");
+    for (let i = 0; i < allTasks.length; i++) {
+        let currentTask = allTasks[i];
+
+        currentTask.addEventListener("dragstart", function () {
+            currentTask.classList.add("being_moved");
+            if (oldColumnId === "") {
+                oldColumnId = currentTask.parentNode.parentNode.parentNode.id;
+            }
+        });
+
+        currentTask.addEventListener("dragend", function () {
+            currentTask.classList.remove("being_moved");
+            updateTaskLocation(currentTask.id.toString());
+        });
+
+        let taskId = currentTask.id;
+        let currentColumn = currentTask.parentNode.parentNode.parentNode;
+        let currentColumnId = currentColumn.id;
+        let taskCloseButton = currentTask.getElementsByClassName("task_close_button")[0];
+
+        taskCloseButton.addEventListener("click", function () {
+            currentTask.remove();
+            let columnsFromStorage = localStorage.getItem("columns");
+            let columnsParsed = JSON.parse(columnsFromStorage);
+            delete columnsParsed[currentColumnId]["tasks"][taskId];
+            localStorage.setItem("columns", JSON.stringify(columnsParsed));
+            let numberOfTasks = getNumberOfTasksInColumn(currentColumnId);
+            currentColumn.getElementsByClassName("column_task_count")[0].innerHTML = `${numberOfTasks}`;
+        });
+
+        let taskUpdateButton = currentTask.getElementsByClassName("task_update_button")[0];
+
+        taskUpdateButton.addEventListener("click", function () {
+            let task_description = currentTask.getElementsByClassName("task_description_input")[0].value;
+            let task_priority = currentTask.getElementsByClassName("task_priority_input")[0].value;
+            let task_due_date = currentTask.getElementsByClassName("task_due_date_input")[0].value;
+            let task_length = currentTask.getElementsByClassName("task_length_input")[0].value;
+            let task_progress = currentTask.getElementsByClassName("task_progress_input")[0].value;
+            let columnsFromStorage = localStorage.getItem("columns");
+            let columnsParsed = JSON.parse(columnsFromStorage);
+            columnsParsed[currentColumnId]["tasks"][taskId]["task"] = task_description;
+            columnsParsed[currentColumnId]["tasks"][taskId]["priority"] = task_priority;
+            columnsParsed[currentColumnId]["tasks"][taskId]["due_date"] = task_due_date;
+            columnsParsed[currentColumnId]["tasks"][taskId]["length"] = task_length;
+            columnsParsed[currentColumnId]["tasks"][taskId]["progress"] = task_progress;
+            localStorage.setItem("columns", JSON.stringify(columnsParsed));
+            updateTaskColour(currentTask);
+
+        });
+
+        updateTaskColour(currentTask);
+    }
+
+    for (let i = 0; i < allTaskContainers.length; i++) {
+        let currentTasksContainer = allTaskContainers[i];
+        currentTasksContainer.addEventListener("dragover", function (event) {
+            event.preventDefault();
+            newColumnId = currentTasksContainer.id;
+        });
+    }
+}
+
+// update the outline for a task based on attributes
+function updateTaskColour(currentTask) {
+    let task_priority = currentTask.getElementsByClassName("task_priority_input")[0].value;
+    let progress = currentTask.getElementsByClassName("task_progress_input")[0].value;
+    if (progress === "Done") {
+        currentTask.classList.remove("medium_priority");
+        currentTask.classList.remove("high_priority");
+        currentTask.classList.add("done");
+    } else {
+        currentTask.classList.remove("done");
+        if (task_priority === "Low") {
+            currentTask.classList.remove("medium_priority");
+            currentTask.classList.remove("high_priority");
+        } else if (task_priority === "Medium") {
+            currentTask.classList.remove("high_priority");
+            currentTask.classList.add("medium_priority");
+        } else if (task_priority === "High") {
+            currentTask.classList.remove("medium_priority");
+            currentTask.classList.add("high_priority");
+        }
+    }
+}
+
+// update which column a task belongs to
+function updateTaskLocation(taskId) {
+    let columnsFromStorage = localStorage.getItem("columns");
+    let columnsParsed = JSON.parse(columnsFromStorage);
+    if (oldColumnId !== newColumnId && oldColumnId !== "" && newColumnId !== "") {
+        if (columnsParsed[oldColumnId]["tasks"][taskId] !== undefined) {
+            columnsParsed[newColumnId]["tasks"][taskId] = columnsParsed[oldColumnId]["tasks"][taskId];
+
+            delete columnsParsed[oldColumnId]["tasks"][taskId];
+            localStorage.setItem("columns", JSON.stringify(columnsParsed));
+
+            oldColumnId = "";
+            newColumnId = "";
+            removeKanbanBoard();
+            loadKanbanBoard();
+        }
+    }
+}
+
+// remove all task columns from the the kanban board
+function removeKanbanBoard() {
+    let kanbanBoard = document.getElementById("kanban_board");
+    while (kanbanBoard.firstChild) {
+        kanbanBoard.firstChild.remove();
+    }
+}
+
+
 
 
 

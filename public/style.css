@@ -396,48 +396,139 @@ h3 {
 
 
 /* Tasks */
-#add_task_button {
-    margin: 17px 0 17px 0;
+.add_task_button {
+    margin: 10px 0 17px 0;
 }
 
 /* iPhone 12 Pro screen size*/
 @media only screen and (min-width: 390px) {
-    #add_task_button {
+    .add_task_button {
         width: 260px;
     }
 }
 
 /* computer screen size */
 @media only screen and (min-width: 1600px) {
-    #add_task_button {
+    .add_task_button {
         width: 320px;
     }
 }
 
 .tasks_container {
-    /* todo */
     display: flex;
     flex-direction: column;
     align-items: center;
     min-height: 63px;
-    /*outline: 2px solid black;*/
 }
 
 .tasks {
-    /* todo */
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
-    /*outline: 2px solid #3f71e6;*/
+    padding-top: 7px;
 }
 
 .task {
-    /* todo */
-    height: 50px;
-    width: 100px;
-    outline: 2px solid black;
     margin: 10px;
+    border-radius: 12px;
+    cursor: move;
+    position: relative;
+}
+
+.task.being_moved {
+    opacity: 0.3;
+}
+
+/* iPhone 12 Pro screen size*/
+@media only screen and (min-width: 390px) {
+    .task {
+        width: 260px;
+    }
+}
+
+/* computer screen size */
+@media only screen and (min-width: 1600px) {
+    .task {
+        width: 320px;
+    }
+}
+
+.task_close_button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding-top: 1px;
+    padding-left: 1px;
+    margin-top: 10px;
+    margin-right: 10px;
+    background-color: white;
+}
+
+.dark_mode .task_close_button {
+    background-color: #212121;
+}
+
+.task_update_button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin-bottom: 10px;
+}
+
+.task_form {
+    margin: 10px;
+}
+
+.task_form ul li {
+    list-style: none;
+    margin: 5px 0;
+}
+
+.task_input_field {
+    color-scheme: light;
+}
+
+.dark_mode .task_input_field {
+    color-scheme: dark;
+}
+
+.task_description {
+    display: inline;
+}
+
+/* iPhone 12 Pro screen size*/
+@media only screen and (min-width: 390px) {
+    .task_description input {
+        width: 140px;
+    }
+}
+
+/* computer screen size */
+@media only screen and (min-width: 1600px) {
+    .task_description input {
+        width: 200px;
+    }
+}
+
+.task_length {
+    display: inline;
+}
+
+.task_length input {
+    width: 55px;
+}
+
+.medium_priority {
+    outline: 2px solid #fed449;
+}
+
+.high_priority {
+    outline: 2px solid #fe5157;
+}
+
+.done {
+    outline: 2px solid #30c862;
 }
 
 
@@ -465,7 +556,6 @@ h3 {
 #music_player {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
 }
